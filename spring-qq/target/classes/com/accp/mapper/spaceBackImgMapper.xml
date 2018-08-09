@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.accp.mapper.spaceBackImgMapper" >
+  <resultMap id="BaseResultMap" type="com.accp.entity.spaceBackImg" >
+    <id column="backImgId" property="backimgid" jdbcType="INTEGER" />
+    <result column="spaceId" property="spaceid" jdbcType="INTEGER" />
+    <result column="createTime" property="createtime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.accp.entity.spaceBackImg" extends="BaseResultMap" >
+    <result column="url" property="url" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    backImgId, spaceId, createTime
+  </sql>
+  <sql id="Blob_Column_List" >
+    url
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from spacebackimg
+    where backImgId = #{backimgid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from spacebackimg
+    where backImgId = #{backimgid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.accp.entity.spaceBackImg" >
+    insert into spacebackimg (backImgId, spaceId, createTime, 
+      url)
+    values (#{backimgid,jdbcType=INTEGER}, #{spaceid,jdbcType=INTEGER}, #{createtime,jdbcType=TIMESTAMP}, 
+      #{url,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.accp.entity.spaceBackImg" >
+    insert into spacebackimg
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="backimgid != null" >
+        backImgId,
+      </if>
+      <if test="spaceid != null" >
+        spaceId,
+      </if>
+      <if test="createtime != null" >
+        createTime,
+      </if>
+      <if test="url != null" >
+        url,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="backimgid != null" >
+        #{backimgid,jdbcType=INTEGER},
+      </if>
+      <if test="spaceid != null" >
+        #{spaceid,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="url != null" >
+        #{url,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.accp.entity.spaceBackImg" >
+    update spacebackimg
+    <set >
+      <if test="spaceid != null" >
+        spaceId = #{spaceid,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null" >
+        createTime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="url != null" >
+        url = #{url,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where backImgId = #{backimgid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.accp.entity.spaceBackImg" >
+    update spacebackimg
+    set spaceId = #{spaceid,jdbcType=INTEGER},
+      createTime = #{createtime,jdbcType=TIMESTAMP},
+      url = #{url,jdbcType=LONGVARCHAR}
+    where backImgId = #{backimgid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.accp.entity.spaceBackImg" >
+    update spacebackimg
+    set spaceId = #{spaceid,jdbcType=INTEGER},
+      createTime = #{createtime,jdbcType=TIMESTAMP}
+    where backImgId = #{backimgid,jdbcType=INTEGER}
+  </update>
+</mapper>

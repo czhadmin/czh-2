@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.accp.mapper.frienDapplforMapper">
+	<resultMap id="BaseResultMap"
+		type="com.accp.entity.frienDapplfor">
+		<id column="applforid" property="applforid" jdbcType="INTEGER" />
+		<result column="remark" property="remark" jdbcType="VARCHAR" />
+		<result column="userid" property="userid" jdbcType="INTEGER" />
+		<result column="pasvuserid" property="pasvuserid"
+			jdbcType="INTEGER" />
+		<result column="isok" property="isok" jdbcType="INTEGER" />
+		<result column="createtime" property="createtime"
+			jdbcType="TIMESTAMP" />
+		<result column="groupingid" property="groupingid"
+			jdbcType="INTEGER" />
+		<result column="beizhu" property="beizhu" jdbcType="VARCHAR" />
+		<collection property="userentity" column="userid"
+			ofType="userTab" select="selectuserTab"></collection>
+			
+			
+			<collection property="userentitytwo" column="pasvuserid"
+			ofType="userTab" select="selectpasvuserid"></collection>
+	</resultMap>
+	<sql id="Base_Column_List">
+		applforId, remark, userId, pasvUserid, isOk, createTime, groupingId, beizhu
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from friendapplfor
+		where applforId = #{applforid,jdbcType=INTEGER}
+	</select>
+	<delete id="deleteByPrimaryKey"
+		parameterType="java.lang.Integer">
+		delete from friendapplfor
+		where applforId = #{applforid,jdbcType=INTEGER}
+	</delete>
+	<insert id="insert"
+		parameterType="com.accp.entity.frienDapplfor">
+		insert into friendapplfor ( remark, userId,
+		pasvUserid, isOk, createTime,
+		groupingId, beizhu)
+		values ( #{remark,jdbcType=VARCHAR}, #{userid,jdbcType=INTEGER},
+		#{pasvuserid,jdbcType=INTEGER}, #{isok,jdbcType=INTEGER}, CURDATE(),
+		#{groupingid,jdbcType=INTEGER}, #{beizhu,jdbcType=VARCHAR})
+	</insert>
+	<insert id="insertSelective"
+		parameterType="com.accp.entity.frienDapplfor">
+		insert into friendapplfor
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="remark != null">
+				remark,
+			</if>
+			<if test="userid != null">
+				userId,
+			</if>
+			<if test="pasvuserid != null">
+				pasvUserid,
+			</if>
+			<if test="isok != null">
+				isOk,
+			</if>
+			createTime,
+			<if test="groupingid != null">
+				groupingId,
+			</if>
+			<if test="beizhu != null">
+				beizhu,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="remark != null">
+				#{remark,jdbcType=VARCHAR},
+			</if>
+			<if test="userid != null">
+				#{userid,jdbcType=INTEGER},
+			</if>
+			<if test="pasvuserid != null">
+				#{pasvuserid,jdbcType=INTEGER},
+			</if>
+			<if test="isok != null">
+				#{isok,jdbcType=INTEGER},
+			</if>
+			CURDATE(),
+			<if test="groupingid != null">
+				#{groupingid,jdbcType=INTEGER},
+			</if>
+			<if test="beizhu != null">
+				#{beizhu,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective"
+		parameterType="com.accp.entity.frienDapplfor">
+		update friendapplfor
+		<set>
+			<if test="remark != null">
+				remark = #{remark,jdbcType=VARCHAR},
+			</if>
+			<if test="userid != null">
+				userId = #{userid,jdbcType=INTEGER},
+			</if>
+			<if test="pasvuserid != null">
+				pasvUserid = #{pasvuserid,jdbcType=INTEGER},
+			</if>
+			<if test="isok != null">
+				isOk = #{isok,jdbcType=INTEGER},
+			</if>
+			<if test="createtime != null">
+				createTime = #{createtime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="groupingid != null">
+				groupingId = #{groupingid,jdbcType=INTEGER},
+			</if>
+			<if test="beizhu != null">
+				beizhu = #{beizhu,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where applforId = #{applforid,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey"
+		parameterType="com.accp.entity.frienDapplfor">
+		update friendapplfor
+		set isOk = #{isok,jdbcType=INTEGER}
+		
+		where userId = #{userid,jdbcType=INTEGER} and pasvUserid = #{pasvuserid,jdbcType=INTEGER}
+	</update>
+
+	<select id="selectuserTab" resultType="userTab">
+		select * from userTab
+		where userId=#{userid}
+	</select>
+	
+	<select id="selectpasvuserid" resultType="userTab">
+		select * from userTab
+		where userId=#{pasvuserid}
+	</select>
+
+	<select id="selectall" resultMap="BaseResultMap">
+	select * from friendapplfor where userid=#{user} or pasvuserid=#{user} 
+	</select>
+</mapper>

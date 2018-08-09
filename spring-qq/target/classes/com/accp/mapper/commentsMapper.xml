@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.accp.mapper.commentsMapper" >
+  <resultMap id="BaseResultMap" type="com.accp.entity.comments" >
+    <id column="commentId" property="commentid" jdbcType="INTEGER" />
+    <result column="stateId" property="stateid" jdbcType="INTEGER" />
+    <result column="userId" property="userid" jdbcType="INTEGER" />
+    <result column="commentTime" property="commenttime" jdbcType="TIMESTAMP" />
+     <collection property="plus" column="userId" ofType="userTab" select="selectcommus"></collection>
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.accp.entity.comments" extends="BaseResultMap" >
+    <result column="commentText" property="commenttext" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    commentId, stateId, userId, commentTime
+  </sql>
+  <sql id="Blob_Column_List" >
+    commentText
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from comments
+    where commentId = #{commentid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from comments
+    where commentId = #{commentid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.accp.entity.comments" useGeneratedKeys="true" keyProperty="commentid">
+    insert into comments ( stateId, userId, 
+      commentTime, commentText)
+    values ( #{stateid,jdbcType=INTEGER}, #{userid,jdbcType=INTEGER}, 
+       CURDATE(), #{commenttext,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.accp.entity.comments" >
+    insert into comments
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="commentid != null" >
+        commentId,
+      </if>
+      <if test="stateid != null" >
+        stateId,
+      </if>
+      <if test="userid != null" >
+        userId,
+      </if>
+      <if test="commenttime != null" >
+        commentTime,
+      </if>
+      <if test="commenttext != null" >
+        commentText,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="commentid != null" >
+        #{commentid,jdbcType=INTEGER},
+      </if>
+      <if test="stateid != null" >
+        #{stateid,jdbcType=INTEGER},
+      </if>
+      <if test="userid != null" >
+        #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="commenttime != null" >
+        #{commenttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="commenttext != null" >
+        #{commenttext,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.accp.entity.comments" >
+    update comments
+    <set >
+      <if test="stateid != null" >
+        stateId = #{stateid,jdbcType=INTEGER},
+      </if>
+      <if test="userid != null" >
+        userId = #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="commenttime != null" >
+        commentTime = #{commenttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="commenttext != null" >
+        commentText = #{commenttext,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where commentId = #{commentid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.accp.entity.comments" >
+    update comments
+    set stateId = #{stateid,jdbcType=INTEGER},
+      userId = #{userid,jdbcType=INTEGER},
+      commentTime = #{commenttime,jdbcType=TIMESTAMP},
+      commentText = #{commenttext,jdbcType=LONGVARCHAR}
+    where commentId = #{commentid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.accp.entity.comments" >
+    update comments
+    set stateId = #{stateid,jdbcType=INTEGER},
+      userId = #{userid,jdbcType=INTEGER},
+      commentTime = #{commenttime,jdbcType=TIMESTAMP}
+    where commentId = #{commentid,jdbcType=INTEGER}
+  </update>
+  
+  <select id="selectcommentId" resultMap="ResultMapWithBLOBs">
+  select * from comments
+  where commentId=#{commentId}
+  </select>
+    <select id="selectcommus" resultType="userTab">
+  select * from userTab
+  where userId=#{userid}
+  </select>
+</mapper>
